@@ -8,16 +8,15 @@ class DeviceModel {
   String os;
   String deviceModel;
 
-  DeviceModel({
-    this.appName,
-    this.buildNumber,
-    this.packageName,
-    this.appVersion,
-    this.isPhysicalDevice,
-    this.osRelease,
-    this.os,
-    this.deviceModel
-  });
+  DeviceModel(
+      {this.appName,
+      this.buildNumber,
+      this.packageName,
+      this.appVersion,
+      this.isPhysicalDevice,
+      this.osRelease,
+      this.os,
+      this.deviceModel});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
@@ -30,5 +29,21 @@ class DeviceModel {
     data['os'] = os;
     data['deviceModel'] = deviceModel;
     return data;
+  }
+
+  @override
+  String toString() {
+    return """
+    {
+      appName: $appName,
+      buildNumber: $buildNumber,
+      packageName: $packageName,
+      appVersion: $appVersion,
+      isPhysicalDevice: $isPhysicalDevice,
+      osRelease: $osRelease,
+      os: $os,
+      deviceModel: $deviceModel
+    }
+    """;
   }
 }

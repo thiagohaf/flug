@@ -63,15 +63,13 @@ class _FlugContainerState extends State<FlugContainer> {
     if (!this.sending) {
       this.sending = true;
 
-      String text = "E-mail: $email\nDescrição: $desc";
-
       var report =
           new Report(this.widget.bugReportServer, this.widget.bugReportKey);
-      var sendStatus = await report.sendReport(text, base64Image);
+      var sendStatus = await report.sendReport(email, desc, base64Image);
 
       debugPrint('sendStatus $sendStatus');
 
-      if (sendStatus == 200) {
+      if (sendStatus == 200 || sendStatus == 201) {
         this.sending = false;
         this.setState(() {
           this.showMessage = true;
@@ -124,7 +122,7 @@ class _FlugContainerState extends State<FlugContainer> {
                     height: 90,
                     transform:
                         Matrix4.translationValues(0, this.notificationPosY, 0),
-                    duration: Duration(milliseconds: 300),
+                    duration: Duration(milliseconds: 3000),
                     child: Text("Enviado! Obrigado.",
                         style: TextStyle(
                             decoration: TextDecoration.none,
