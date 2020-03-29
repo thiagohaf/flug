@@ -22,7 +22,7 @@ class Report {
     // _headers['Authorization'] = this.bugReportKey;
 
     final device = await _getDevice();
-
+    var createdAt = DateTime.now().toIso8601String();
     var response = await http.post(
       url,
       headers: _headers,
@@ -31,7 +31,12 @@ class Report {
         'description': description,
         'imageURL': imageBase64,
         'device': device,
-        'email': email
+        'email': email,
+        'appName': device.appName,
+        'appVersion': device.appVersion,
+        'buildNumber': device.buildNumber,
+        'packageName': device.packageName,
+        'createdAt': createdAt
       }),
     );
 
@@ -49,22 +54,26 @@ class Report {
     // _headers['Authorization'] = this.bugReportKey;
 
     final device = await _getDevice();
-
+    var createdAt = DateTime.now().toIso8601String();
     var response = await http.post(
-        url,
-        headers: _headers,
-        body: json.encode({
-          'key': this.bugReportKey,
-          'device': device,
-          'error': error,
-          'stackTrace': stacktrace
+      url,
+      headers: _headers,
+      body: json.encode({
+        'key': this.bugReportKey,
+        'device': device,
+        'error': error,
+        'stackTrace': stacktrace,
+        'appName': device.appName,
+        'appVersion': device.appVersion,
+        'buildNumber': device.buildNumber,
+        'packageName': device.packageName,
+        'createdAt': createdAt
       }),
     );
     return response.statusCode;
   }
 
-
- Future<DeviceModel> _getDevice() async {
+  Future<DeviceModel> _getDevice() async {
     DeviceModel device;
 
     await FlugDevice.getDevice().then((result) => device = result);
