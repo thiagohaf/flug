@@ -65,7 +65,7 @@ class _BugButtonState extends State<BugButton> {
             height: 60,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
-                color: Colors.redAccent),
+                color: Colors.green),
             child: Icon(Icons.bug_report, color: Colors.white),
           ),
         ),
