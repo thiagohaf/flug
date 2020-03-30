@@ -129,7 +129,7 @@ class _FlugContainerState extends State<FlugContainer> {
                             color: Colors.white,
                             fontSize: 14,
                             fontFamily: 'Roboto')))
-                : Container())
+                : Container()),
           ]),
         ));
   }
