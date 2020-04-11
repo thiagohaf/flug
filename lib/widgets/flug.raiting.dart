@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 // import 'package:http/http.dart' as http;
 
 class FlugRaiting extends StatefulWidget {
-  final Function onPressed;
+  final Function(double rating, String comment) onPressed;
   TextEditingController _ratingController = TextEditingController();
   double _userRating = 3;
   FlugRaiting({Key key, this.onPressed}) : super(key: key);
@@ -74,9 +74,8 @@ class _FlugRaitingState extends State<FlugRaiting> {
               height: 20,
             ),
             RaisedButton(
-              // onPressed: widget.onPressed(
-              //     widget._userRating, widget._ratingController.text),
-              onPressed: () {},
+              onPressed: () => widget.onPressed(
+                  widget._userRating, widget._ratingController.text),
               color: Colors.lightGreen,
               child: const Text('Enviar',
                   style: TextStyle(
