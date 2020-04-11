@@ -8,12 +8,10 @@ import 'package:flug/widgets/flug.raiting.dart';
 class FeedbackScreen extends StatefulWidget {
   final Uint8List pngBytes;
   final Function sendFeedback;
+  final Function sendRating;
 
-  FeedbackScreen({Key key, this.pngBytes, this.sendFeedback}) : super(key: key);
-
-  String get bugReportKey => null;
-
-  String get bugReportServer => null;
+  FeedbackScreen({Key key, this.pngBytes, this.sendFeedback, this.sendRating})
+      : super(key: key);
 
   @override
   _FeedbackScreenState createState() => _FeedbackScreenState();
@@ -27,39 +25,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   TextEditingController descController;
   FocusNode emailFocus;
   Uint8List actualImage;
-
-  sendRating(double rating, String comment) async {
-    // if (!this.sending) {
-    // this.sending = true;
-
-    var report =
-        new Report(this.widget.bugReportServer, this.widget.bugReportKey);
-    var sendStatus = await report.sendVote(rating, comment);
-
-    debugPrint('sendStatus $sendStatus');
-
-    // if (sendStatus == 200 || sendStatus == 201) {
-    // this.sending = false;
-    // this.setState(() {
-    //   this.showMessage = true;
-    //   this.notificationPosY = 0;
-    //   this.showNavigation = false;
-    // });
-
-    // await Future.delayed(Duration(seconds: 2));
-
-    // this.setState(() {
-    //   this.notificationPosY = -100;
-    // });
-
-    // await Future.delayed(Duration(milliseconds: 300));
-
-    // this.setState(() {
-    //   this.showMessage = false;
-    // });
-    // }
-    // }
-  }
 
   @override
   void initState() {
@@ -185,7 +150,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       actualImage: actualImage),
                   SizedBox(height: 30),
                   FlugRaiting(
-                    onPressed: sendRating,
+                    onPressed: (rating, comment) {
+                      if (this.widget.sendRating != null) {
+                        widget.sendRating(rating, comment);
+                        Navigator.of(context).pop();
+                      }
+                    },
                   ),
                 ],
               ),

@@ -53,8 +53,26 @@ class _FlugContainerState extends State<FlugContainer> {
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return FeedbackScreen(
-          pngBytes: pngBytes, sendFeedback: this.sendFeedback);
+          pngBytes: pngBytes,
+          sendFeedback: this.sendFeedback,
+          sendRating: this.sendRating);
     }));
+  }
+
+  sendRating(double rating, String comment) async {
+    if (!this.sending) {
+      this.sending = true;
+
+      print(this.widget.bugReportServer);
+      print("Rating: $rating, Comment: $comment");
+      var report =
+          new Report(this.widget.bugReportServer, this.widget.bugReportKey);
+      var sendStatus = await report.sendVote(rating, comment);
+
+      debugPrint('sendStatus $sendStatus');
+
+      await _configureMessage(sendStatus);
+    }
   }
 
   sendFeedback(String email, String desc, Uint8List image) async {
@@ -68,27 +86,30 @@ class _FlugContainerState extends State<FlugContainer> {
       var sendStatus = await report.sendReport(email, desc, base64Image);
 
       debugPrint('sendStatus $sendStatus');
+      await _configureMessage(sendStatus);
+    }
+  }
 
-      if (sendStatus == 200 || sendStatus == 201) {
-        this.sending = false;
-        this.setState(() {
-          this.showMessage = true;
-          this.notificationPosY = 0;
-          this.showNavigation = false;
-        });
+  _configureMessage(int sendStatus) async {
+    if (sendStatus == 200 || sendStatus == 201) {
+      this.sending = false;
+      this.setState(() {
+        this.showMessage = true;
+        this.notificationPosY = 0;
+        this.showNavigation = false;
+      });
 
-        await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 2));
 
-        this.setState(() {
-          this.notificationPosY = -100;
-        });
+      this.setState(() {
+        this.notificationPosY = -100;
+      });
 
-        await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(Duration(milliseconds: 300));
 
-        this.setState(() {
-          this.showMessage = false;
-        });
-      }
+      this.setState(() {
+        this.showMessage = false;
+      });
     }
   }
 

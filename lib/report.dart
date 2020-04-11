@@ -85,19 +85,21 @@ class Report {
   Future<int> sendVote(double rating, String comment) async {
     print("Nota $rating => $comment");
 
-    // var url = '';
-    // var _headers = Map<String, String>();
+    var url = '$bugReportServer/ratings';
+    var _headers = Map<String, String>();
 
-    // _headers["Content-Type"] = "application/json";
-    // String createdAt = DateTime.now().toIso8601String();
-    // print("chegou ===> $rating  e $comment");
-    // var response = await http.post(url,
-    //     headers: _headers,
-    //     body: json.encode({
-    //       'rating': rating,
-    //       'comment': comment,
-    //       'createdAt': createdAt,
-    //     }));
-    return 1;
+    _headers["Content-Type"] = "application/json";
+    String createdAt = DateTime.now().toIso8601String();
+    print("chegou ===> $rating  e $comment");
+    var response = await http.post(
+      url,
+      headers: _headers,
+      body: json.encode({
+        'ratings': rating,
+        'comment': comment,
+        'createdAt': createdAt,
+      }),
+    );
+    return response.statusCode;
   }
 }
