@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flug/report.dart';
 import 'package:flutter/material.dart';
 import 'package:flug/screens/image.editor.screen.dart';
 import 'package:flug/widgets/flug.raiting.dart';
@@ -25,6 +24,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   TextEditingController descController;
   FocusNode emailFocus;
   Uint8List actualImage;
+  String selectedValue = "Reportar Bug";
 
   @override
   void initState() {
@@ -93,70 +93,102 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   SizedBox(height: 20),
-                  TextFormField(
-                    focusNode: emailFocus,
-                    autovalidate: true,
-                    controller: emailController,
-                    validator: (text) {
-                      if (text == "") {
-                        return "Seu e-mail não pode estar em branco";
-                      }
-                      return null;
+                  DropdownButton<String>(
+                    isExpanded: true,
+                    value: selectedValue,
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        selectedValue = newValue;
+                      });
                     },
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFDEDEDE))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)),
-                        labelStyle: TextStyle(color: Color(0xFFDDDDDD)),
-                        labelText: "Insira seu e-mail"),
+                    items: <String>["Reportar Bug", "Enviar Feedback"]
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
-                  TextFormField(
-                    minLines: 5,
-                    maxLines: 5,
-                    controller: descController,
-                    autovalidate: true,
-                    validator: (text) {
-                      if (text == "") {
-                        return "A descrição não pode estar vazia!";
-                      }
-                      if (text.length < 15) {
-                        return "Descreva o problema com mais detalhes";
-                      }
-                      return null;
-                    },
-                    style: TextStyle(fontSize: 14),
-                    decoration: InputDecoration(
-                        alignLabelWithHint: true,
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFDEDEDE))),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)),
-                        hasFloatingPlaceholder: false,
-                        labelStyle: TextStyle(color: Color(0xFFDDDDDD)),
-                        labelText:
-                            "Por favor, seja o mais detalhista possível.\nO que você esperava e o que aconteceu?"),
-                  ),
-                  AttachmentImage(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return ImageEditorScreen(
-                            backgroundImage: Image.memory(actualImage),
-                            doneEditing: this.doneEditing,
-                          );
-                        }));
-                      },
-                      actualImage: actualImage),
-                  SizedBox(height: 30),
-                  FlugRaiting(
-                    onPressed: (rating, comment) {
-                      if (this.widget.sendRating != null) {
-                        widget.sendRating(rating, comment);
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ),
+                  SizedBox(height: 20),
+                  selectedValue == "Reportar Bug"
+                      ? Column(
+                          children: <Widget>[
+                            TextFormField(
+                              focusNode: emailFocus,
+                              autovalidate: true,
+                              controller: emailController,
+                              validator: (text) {
+                                if (text == "") {
+                                  return "Seu e-mail não pode estar em branco";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFDEDEDE))),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.blue)),
+                                  labelStyle:
+                                      TextStyle(color: Color(0xFFDDDDDD)),
+                                  labelText: "Insira seu e-mail"),
+                            ),
+                            TextFormField(
+                              minLines: 5,
+                              maxLines: 5,
+                              controller: descController,
+                              autovalidate: true,
+                              validator: (text) {
+                                if (text == "") {
+                                  return "A descrição não pode estar vazia!";
+                                }
+                                if (text.length < 15) {
+                                  return "Descreva o problema com mais detalhes";
+                                }
+                                return null;
+                              },
+                              style: TextStyle(fontSize: 14),
+                              decoration: InputDecoration(
+                                  alignLabelWithHint: true,
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFDEDEDE))),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.blue)),
+                                  hasFloatingPlaceholder: false,
+                                  labelStyle:
+                                      TextStyle(color: Color(0xFFDDDDDD)),
+                                  labelText:
+                                      "Por favor, seja o mais detalhista possível.\nO que você esperava e o que aconteceu?"),
+                            ),
+                            AttachmentImage(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return ImageEditorScreen(
+                                      backgroundImage:
+                                          Image.memory(actualImage),
+                                      doneEditing: this.doneEditing,
+                                    );
+                                  }));
+                                },
+                                actualImage: actualImage),
+                            SizedBox(height: 30),
+                          ],
+                        )
+                      : FlugRaiting(
+                          onPressed: (rating, comment) {
+                            if (this.widget.sendRating != null) {
+                              widget.sendRating(rating, comment);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
                 ],
               ),
             ),
