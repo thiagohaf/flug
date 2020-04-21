@@ -56,7 +56,7 @@ class _FlugRaitingState extends State<FlugRaiting> {
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: TextFormField(
                 controller: widget._ratingController,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(4)),
