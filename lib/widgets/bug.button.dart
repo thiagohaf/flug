@@ -64,9 +64,12 @@ class _BugButtonState extends State<BugButton> {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Colors.green),
-            child: Icon(Icons.bug_report, color: Colors.white),
+                borderRadius: BorderRadius.circular(30), color: Colors.green),
+            child: Icon(
+              Icons.live_help,
+              color: Colors.white,
+              size: 30,
+            ),
           ),
         ),
       ),
